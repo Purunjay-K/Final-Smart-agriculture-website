@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Irrigation Table</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="table.css">
+    <style>
+        .rec-urgent { color: #c62828; }
+        .rec-needed { color: #ef6c00; }
+        .rec-ok, .rec-wet { color: #2e7d32; }
+        .table-note {
+            width: min(1000px, 94%);
+            margin: 14px auto;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        .table-note a { color: #1b5e20; }
+    </style>
+</head>
+<body>
+    <header style="text-align:center; padding:20px;">
+        <h1>Soil Moisture &amp; Irrigation</h1>
+        <p><i>AI-based irrigation recommendations for registered farm plots</i></p>
+    </header>
+
+    <table class="irrigation-table">
+        <caption>Farm Irrigation Recommendations</caption>
+        <thead>
+            <tr>
+                <th>Plot ID</th>
+                <th>Farmer Name</th>
+                <th>Soil Moisture (%)</th>
+                <th>Temperature</th>
+                <th>Irrigation Recommendation</th>
+                <th>Water Requirement</th>
+            </tr>
+        </thead>
+        <tbody id="irrigationBody">
+            <!-- rows are generated from the registered farmers by the script below -->
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5" style="text-align:right;"><b>Total Water Requirement</b></td>
+                <td><b id="totalWater">0 Litres</b></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <p class="table-note">
+        Rows come from the <a href="registration.html">Farmer Registration</a> form.
+        Rules: below 30% moisture &rarr; 60 minutes (700 Litres); 30&ndash;39% &rarr; 45 minutes
+        (500 Litres); 40% and above &rarr; irrigation not required.
+        Same moisture bands as the field advisory.
+    </p>
+    <p class="table-note"><a href="farm-info.html">&larr; Back to Farm Information</a></p>
+
+    <footer>Efficient Water Use = Sustainable Agriculture</footer>
+
+    <script>
+        // Same key that registration.html / validation.js saves to
+        var STORAGE_KEY = "registeredFarmers";
+
+        var body = document.getElementById("irrigationBody");
+        var totalCell = document.getElementById("totalWater");
+
+        function loadFarmers() {
+            try {
+                var saved = localStorage.getItem(STORAGE_KEY);
+                var list = saved ? JSON.parse(saved) : [];
+                return Array.isArray(list) ? list : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        // Recommendation rules (same moisture bands as the field advisory page)
+        function getRecommendation(moisture) {
+            if (moisture < 30)  return { litres: 700, text: "60 Minutes", level: "urgent" };
+            if (moisture < 40)  return { litres: 500, text: "45 Minutes", level: "needed" };
+            if (moisture <= 60) return { litres: 0, text: "Not required (monitor)", level: "ok" };
+            return { litres: 0, text: "Not required (soil is wet)", level: "wet" };
+        }
+
+        function makeCell(text, bold, className) {
+            var td = document.createElement("td");
+            if (bold) {
+                var b = document.createElement("b");
+                b.textContent = text;
+                td.appendChild(b);
+            } else {
+                td.textContent = text;
+            }
+            if (className) td.className = className;
+            return td;
+        }
+
+        function render() {
+            var farmers = loadFarmers();
+            var total = 0;
+            body.innerHTML = "";
+
+            if (farmers.length === 0) {
+                var emptyRow = document.createElement("tr");
+                var emptyCell = document.createElement("td");
+                emptyCell.colSpan = 6;
+                emptyCell.style.textAlign = "center";
+                emptyCell.innerHTML = 'No farmers registered yet. <a href="registration.html">Register a farmer</a> to see irrigation recommendations.';
+                emptyRow.appendChild(emptyCell);
+                body.appendChild(emptyRow);
+                totalCell.textContent = "0 Litres";
+                return;
+            }
+
+            // Group rows with the same Plot ID so the Plot ID cell can use rowspan
+            var groups = new Map();
+            farmers.forEach(function (farmer) {
+                var key = String(farmer.plot).trim().toLowerCase();
+                if (!groups.has(key)) groups.set(key, []);
+                groups.get(key).push(farmer);
+            });
+
+            groups.forEach(function (group) {
+                group.forEach(function (farmer, i) {
+                    var moisture = Number(farmer.moisture);
+                    var rec = getRecommendation(moisture);
+                    total += rec.litres;
+
+                    var row = document.createElement("tr");
+
+                    if (i === 0) {
+                        var plotCell = makeCell(farmer.plot, false);
+                        plotCell.rowSpan = group.length;
+                        row.appendChild(plotCell);
+                    }
+
+                    var hasTemp = farmer.temperature !== undefined &&
+                                  farmer.temperature !== null && farmer.temperature !== "";
+
+                    row.appendChild(makeCell(farmer.name, false));
+                    row.appendChild(makeCell(moisture + "%", true));
+                    row.appendChild(makeCell(hasTemp ? farmer.temperature + " \u00B0C" : "\u2014", false));
+                    row.appendChild(makeCell(rec.text, true, "rec-" + rec.level));
+                    row.appendChild(makeCell(rec.litres + " Litres", false));
+
+                    body.appendChild(row);
+                });
+            });
+
+            totalCell.textContent = total + " Litres";
+        }
+
+        render();
+
+        // Refresh if registrations change in another tab
+        window.addEventListener("storage", render);
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+/* Task 3 - External CSS for the whole website theme */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f1f8e9;
+    color: #263238;
+    line-height: 1.6;
+}
+
+h1, h2, h3 {
+    color: #1b5e20;
+}
+
+a {
+    color: #1565c0;
+}
+
+footer {
+    margin-top: 30px;
+    padding: 18px;
+    text-align: center;
+    background-color: #1b5e20;
+    color: white;
+}
+
+img {
+    max-width: 100%;
+}
+
+section {
+    margin: 20px auto;
+    max-width: 1200px;
+}
+
+button, input[type="submit"], input[type="reset"] {
+    cursor: pointer;
+}

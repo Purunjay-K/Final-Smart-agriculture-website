@@ -1,0 +1,32 @@
+/* Task 9 - Page Layout */
+.page-layout {
+    display: flex;
+    gap: 25px;
+    width: min(1200px, 94%);
+    margin: 25px auto;
+    align-items: flex-start;
+}
+
+.page-sidebar {
+    width: 28%;
+    flex-shrink: 0;
+}
+
+.page-content {
+    width: 72%;
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+}
+
+@media (max-width: 768px) {
+    .page-layout {
+        flex-direction: column;
+    }
+
+    .page-sidebar,
+    .page-content {
+        width: 100%;
+    }
+}

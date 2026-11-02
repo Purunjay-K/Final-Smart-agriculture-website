@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sugarcane Crop Stages</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .stages-wrap {
+            width: min(1000px, 94%);
+            margin: 30px auto;
+        }
+        .intro {
+            text-align: center;
+            max-width: 760px;
+            margin: 0 auto 30px;
+            line-height: 1.7;
+        }
+
+        /* Timeline summary */
+        .timeline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 35px;
+        }
+        .timeline a {
+            background: #2e7d32;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .timeline a:hover {
+            background: #66bb6a;
+            color: #102a13;
+        }
+
+        /* Stage cards */
+        .stage-card {
+            background: #fff;
+            border: 2px solid #81c784;
+            border-left: 10px solid #2e7d32;
+            border-radius: 12px;
+            padding: 22px 26px;
+            margin-bottom: 26px;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.10);
+        }
+        .stage-card h2 {
+            margin: 0 0 4px;
+            color: #1b5e20;
+        }
+        .stage-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0 14px;
+        }
+        .badge {
+            background: #e8f5e9;
+            color: #1b5e20;
+            border: 1px solid #a5d6a7;
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .badge.water {
+            background: #e1f5fe;
+            color: #01579b;
+            border-color: #81d4fa;
+        }
+        .stage-card h3 {
+            margin: 16px 0 6px;
+            font-size: 1.05rem;
+            color: #2e7d32;
+        }
+        .stage-card ul {
+            margin: 0;
+            padding-left: 22px;
+            line-height: 1.7;
+        }
+        .tip {
+            margin-top: 16px;
+            padding: 12px 16px;
+            background: #fff8e1;
+            border-left: 5px solid #ef6c00;
+            border-radius: 6px;
+        }
+
+        /* Summary table */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            margin-top: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+        .summary-table th {
+            background: #2e7d32;
+            color: #fff;
+            padding: 12px;
+            text-align: left;
+        }
+        .summary-table td {
+            padding: 12px;
+            border-bottom: 1px solid #c8e6c9;
+        }
+        .table-scroll { overflow-x: auto; }
+        .back-link { text-align: center; margin: 30px 0 10px; }
+    </style>
+</head>
+<body>
+    <header style="background-color:#1b5e20; color:white; padding:20px; text-align:center;">
+        <h1 style="color:white;">Sugarcane Crop Stages</h1>
+        <p style="margin:6px 0 0;"><i>From planting to harvest: what happens and how much water the crop needs</i></p>
+    </header>
+
+    <main class="stages-wrap">
+        <p class="intro">
+            Sugarcane grows through four main stages over roughly 10 to 12 months.
+            Each stage has different water needs, so the irrigation advice changes as the
+            crop develops. Timings below are approximate and vary with variety, season,
+            soil and climate.
+        </p>
+
+        <nav class="timeline">
+            <a href="#germination">1. Germination</a>
+            <a href="#tillering">2. Tillering</a>
+            <a href="#grand-growth">3. Grand Growth</a>
+            <a href="#maturity">4. Maturity</a>
+        </nav>
+
+        <!-- STAGE 1 -->
+        <section class="stage-card" id="germination">
+            <h2>1. Germination</h2>
+            <i>Initial growth stage of the crop.</i>
+            <div class="stage-meta">
+                <span class="badge">Duration: about 0 – 45 days</span>
+                <span class="badge water">Water need: Light but frequent</span>
+            </div>
+
+            <h3>What happens</h3>
+            <ul>
+                <li>The buds on the planted sugarcane pieces (setts) sprout and shoots appear above the soil.</li>
+                <li>Roots develop from the base of each sett and begin to take up water.</li>
+                <li>The young shoots are weak, so the plant depends on the food stored in the sett.</li>
+            </ul>
+
+            <h3>Irrigation advice</h3>
+            <ul>
+                <li>Keep the soil evenly moist, but never waterlogged, because setts can rot in standing water.</li>
+                <li>A light watering soon after planting, followed by regular light irrigation, helps the buds sprout evenly.</li>
+                <li>Dry soil at this stage leads to patchy sprouting and gaps in the field.</li>
+            </ul>
+
+            <div class="tip"><b>Watch for:</b> poor sprouting, gaps in rows and soil crusting. Replant gaps early.</div>
+        </section>
+
+        <!-- STAGE 2 -->
+        <section class="stage-card" id="tillering">
+            <h2>2. Tillering</h2>
+            <i>Stage where new shoots develop.</i>
+            <div class="stage-meta">
+                <span class="badge">Duration: about 45 – 120 days</span>
+                <span class="badge water">Water need: Moderate to high</span>
+            </div>
+
+            <h3>What happens</h3>
+            <ul>
+                <li>Each plant produces new side shoots (tillers) from the base, forming a clump.</li>
+                <li>Only the stronger tillers survive and later become millable canes.</li>
+                <li>Leaf area grows fast, and the plant starts to use more water and nutrients.</li>
+            </ul>
+
+            <h3>Irrigation advice</h3>
+            <ul>
+                <li>Moisture is critical here, because water shortage reduces the number of tillers and so the final yield.</li>
+                <li>Irrigate at regular intervals to keep the root zone moist.</li>
+                <li>Weed control and fertiliser at this stage work best when the soil is moist.</li>
+            </ul>
+
+            <div class="tip"><b>Watch for:</b> yellowing leaves and thin, weak tillers, which usually point to water or nutrient stress.</div>
+        </section>
+
+        <!-- STAGE 3 -->
+        <section class="stage-card" id="grand-growth">
+            <h2>3. Grand Growth</h2>
+            <i>Rapid growth stage of sugarcane.</i>
+            <div class="stage-meta">
+                <span class="badge">Duration: about 120 – 270 days</span>
+                <span class="badge water">Water need: Highest</span>
+            </div>
+
+            <h3>What happens</h3>
+            <ul>
+                <li>The canes elongate quickly, gaining length, thickness and weight.</li>
+                <li>This is the longest stage, and most of the final yield is built during it.</li>
+                <li>The crop's water and nutrient demand is at its peak.</li>
+            </ul>
+
+            <h3>Irrigation advice</h3>
+            <ul>
+                <li>This is the most water-hungry stage, so do not let the soil dry out.</li>
+                <li>In hot, dry weather, irrigate more often because evaporation is high.</li>
+                <li>Drip irrigation saves water here while keeping moisture steady.</li>
+            </ul>
+
+            <div class="tip"><b>Watch for:</b> leaf curling in the afternoon, short canes and slowed growth. These are signs that the crop needs water.</div>
+        </section>
+
+        <!-- STAGE 4 -->
+        <section class="stage-card" id="maturity">
+            <h2>4. Maturity</h2>
+            <i>Final stage before harvesting.</i>
+            <div class="stage-meta">
+                <span class="badge">Duration: about 270 – 360 days</span>
+                <span class="badge water">Water need: Reduced</span>
+            </div>
+
+            <h3>What happens</h3>
+            <ul>
+                <li>Growth slows and the canes store sugar (sucrose) in their stems.</li>
+                <li>Leaves dry and turn yellow, and the canes become hard and ready to cut.</li>
+                <li>Sugar content rises as the crop ripens.</li>
+            </ul>
+
+            <h3>Irrigation advice</h3>
+            <ul>
+                <li>Cut down on irrigation, because too much water at this stage lowers sugar content.</li>
+                <li>Many growers stop irrigating a few weeks before harvest so the canes can ripen.</li>
+                <li>Avoid waterlogging, which can cause new growth and reduce quality.</li>
+            </ul>
+
+            <div class="tip"><b>Watch for:</b> yellowing top leaves and hard, thick canes. These are signs the crop is ready to harvest.</div>
+        </section>
+
+        <!-- QUICK SUMMARY -->
+        <h2 style="text-align:center; color:#1b5e20; margin-top:40px;">Quick Summary</h2>
+        <div class="table-scroll">
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Stage</th>
+                        <th>Approx. Duration</th>
+                        <th>Water Need</th>
+                        <th>Main Focus</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><b>Germination</b></td><td>0 – 45 days</td><td>Light but frequent</td><td>Even sprouting</td></tr>
+                    <tr><td><b>Tillering</b></td><td>45 – 120 days</td><td>Moderate to high</td><td>More tillers</td></tr>
+                    <tr><td><b>Grand Growth</b></td><td>120 – 270 days</td><td>Highest</td><td>Cane length and weight</td></tr>
+                    <tr><td><b>Maturity</b></td><td>270 – 360 days</td><td>Reduced</td><td>Sugar build-up</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p class="back-link"><a href="farm-info.html">← Back to Farm Information</a></p>
+    </main>
+
+    <footer>Smart Irrigation • Better Farming • Water Conservation</footer>
+</body>
+</html>

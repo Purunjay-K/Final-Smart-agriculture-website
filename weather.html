@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecast</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="layout.css">
+</head>
+<body>
+    <header style="text-align:center; padding:20px; background:#e3f2fd;">
+        <h1>☁ Today's Weather Forecast ☀</h1>
+        <p><i>Weather information for smarter irrigation decisions</i></p>
+    </header>
+
+    <section class="page-content" style="width:min(1000px,94%); margin:25px auto;">
+        <h2>Today's Weather Forecast</h2>
+
+        <figure style="text-align:center;">
+            <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Weather_station.png"
+                 alt="Weather Monitoring Station" title="Weather Monitoring Station"
+                 width="250" height="330">
+            <figcaption><b>Weather Monitoring Station</b></figcaption>
+        </figure>
+
+        <h3>🌦 IMD Weather Forecast</h3>
+        <iframe src="https://mausam.imd.gov.in/"
+                width="100%" height="400"
+                title="IMD Weather Forecast"></iframe>
+
+        <h3>Farm Location</h3>
+        <iframe src="https://www.google.com/maps?q=Karnataka,India&amp;output=embed"
+                width="100%" height="400"
+                title="Farm Location on Google Maps"></iframe>
+    </section>
+
+    <footer>Weather + Soil Data = Smarter Irrigation</footer>
+</body>
+</html>

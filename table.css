@@ -1,0 +1,34 @@
+/* Task 7 - Table Styling */
+.irrigation-table {
+    width: 95%;
+    margin: 25px auto;
+    border-collapse: collapse;
+    text-align: center;
+    background-color: white;
+}
+
+.irrigation-table caption {
+    padding: 12px;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #134e4a;
+}
+
+.irrigation-table th,
+.irrigation-table td {
+    border: 1px solid #80cbc4;
+    padding: 12px;
+}
+
+.irrigation-table th {
+    background-color: #0f766e;
+    color: white;
+}
+
+.irrigation-table tbody tr:nth-child(even) {
+    background-color: #e0f2f1;
+}
+
+.irrigation-table tbody tr:hover {
+    background-color: #b2dfdb;
+}

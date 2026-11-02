@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm Information</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="cards.css">
+    <link rel="stylesheet" href="layout.css">
+
+    <style>
+        .info-card {
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+            cursor: pointer;
+        }
+        .info-card .card-link {
+            color: inherit;
+            text-decoration: none;
+        }
+        /* stretches the link over the whole card */
+        .info-card .card-link::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+        }
+    </style>
+</head>
+<body>
+    <header style="background-color:#1b5e20; color:white; padding:20px; text-align:center;">
+        <h1 style="color:white;">Farm Information</h1>
+    </header>
+
+    <div class="page-layout">
+        <!-- Task 4: Sidebar -->
+        <aside class="page-sidebar sidebar-card">
+            <h2>Farm Resources</h2>
+            <ul>
+                <li>Farm Plot Map</li>
+                <li>Soil Moisture &amp; Irrigation Table</li>
+                <li>Weather Forecast</li>
+                <li>Water Conservation Media</li>
+                
+                <li>Crop Stages</li>
+            </ul>
+        </aside>
+
+        <!-- Task 5: Card Layout -->
+        <main class="page-content">
+            <h2>About the farm:</h2>
+
+            <div class="info-card">
+                <h3><a href="plot-map.html" class="card-link">Farm Plot Map</a></h3>
+            </div>
+            <div class="info-card">
+                <h3><a href="irrigation-table.html" class="card-link">Soil Moisture &amp; Irrigation Table</a></h3>
+            </div>
+            <div class="info-card">
+                <h3><a href="weather.html" class="card-link">Weather Forecast</a></h3>
+            </div>
+            <div class="info-card">
+                <h3><a href="media.html" class="card-link">Water Conservation Media</a></h3>
+            </div>
+            
+                        <div class="info-card">
+                <h3><a href="crop_stages.html" class="card-link">Crop Stages</a></h3>
+            </div>
+        </main>
+    </div>
+
+    <footer>Smart Irrigation • Better Farming • Water Conservation</footer>
+</body>
+</html>

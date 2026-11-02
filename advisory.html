@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Irrigation Advisory</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="effects.css">
+    <style>
+        .portal-btn {
+            display: inline-block;
+            padding: 12px 22px;
+            margin: 6px 6px 6px 0;
+            background: #2e7d32;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+        .portal-btn:hover {
+            background: #66bb6a;
+            color: #102a13;
+        }
+        .portal-btn.secondary {
+            background: #fff;
+            color: #2e7d32;
+            border: 2px solid #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <main class="page-content" style="width:min(900px,92%); margin:40px auto;">
+        <h1>Today's Irrigation Advisory</h1>
+        <hr>
+
+        <div class="offer-box">
+            💧 Recommended Irrigation: 45 Minutes
+        </div>
+
+        <h2><mark>Sugarcane Field Recommendation</mark></h2>
+        <p>
+            <strong>Plot ID:</strong> A101<br>
+            <strong>Farmer Name:</strong> Rajesh Patil<br>
+            <strong>Soil Moisture:</strong> <em>32%</em><br>
+            <strong>Recommended Irrigation Duration:</strong>
+            <mark>45 Minutes</mark><br>
+            <strong>Water Stress Level:</strong> <em>Moderate</em>
+        </p>
+        <hr>
+        <small>Recommendation generated using soil moisture and weather data.</small>
+
+        <!-- Experiment 8: React Field Monitoring Portal -->
+        <hr>
+        <h2><mark>Live Field Advisory</mark></h2>
+        <p>
+            Monitor soil moisture for every field and see colour-coded irrigation
+            advice. Use the buttons on each field card to simulate irrigation or a
+            dry day and watch the advisory update.
+        </p>
+        <p>
+            <a href="exp8/index.html#/fields" class="portal-btn">View Field Advisory →</a>
+            <a href="exp8/index.html" class="portal-btn secondary">Open Full Portal</a>
+        </p>
+    </main>
+    <footer>AI-Based Smart Irrigation Advisory System</footer>
+</body>
+</html>

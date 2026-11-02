@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plot Details</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .status-heading { margin-bottom: 6px; }
+        .status-urgent   { color: #c62828; }
+        .status-moderate { color: #ef6c00; }
+        .status-healthy  { color: #1b5e20; }
+        .status-wet      { color: #0277bd; }
+
+        .plot-photo-large {
+            display: block;
+            width: 100%;
+            max-height: 340px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid #81c784;
+            margin: 18px auto;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+        }
+        .detail-card {
+            background: #fff;
+            border: 2px solid #81c784;
+            border-radius: 12px;
+            padding: 8px 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0f2e1;
+        }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-row span:first-child { color: #546e7a; font-weight: 600; }
+        .advice-box {
+            padding: 14px 18px;
+            border-radius: 8px;
+            text-align: left;
+            line-height: 1.6;
+            border-left: 6px solid;
+        }
+        .advice-urgent   { background: #ffebee; border-color: #c62828; }
+        .advice-moderate { background: #fff8e1; border-color: #ef6c00; }
+        .advice-healthy  { background: #e8f5e9; border-color: #2e7d32; }
+        .advice-wet      { background: #e1f5fe; border-color: #0277bd; }
+        .links-row { margin-top: 24px; line-height: 2; }
+    </style>
+</head>
+<body>
+    <main id="content" class="page-content" style="width:min(700px,92%); margin:50px auto; text-align:center;"></main>
+    <footer>Smart Irrigation Advisory System</footer>
+
+    <script>
+        var STORAGE_KEY = "registeredFarmers";
+        var PHOTO_KEY = "farmPhotos";
+
+        function loadFarmers() {
+            try {
+                var saved = localStorage.getItem(STORAGE_KEY);
+                var list = saved ? JSON.parse(saved) : [];
+                return Array.isArray(list) ? list : [];
+            } catch (e) { return []; }
+        }
+
+        function loadPhotos() {
+            try {
+                var saved = localStorage.getItem(PHOTO_KEY);
+                var obj = saved ? JSON.parse(saved) : {};
+                return (obj && typeof obj === "object" && !Array.isArray(obj)) ? obj : {};
+            } catch (e) { return {}; }
+        }
+
+        // Status heading and advice from the soil moisture (same bands as the advisory page)
+        function getStatus(moisture) {
+            if (moisture < 30) return {
+                label: "Needs Irrigation", level: "urgent",
+                advice: "Irrigate now: the soil is very dry. Recommended irrigation: 60 minutes (about 700 Litres)."
+            };
+            if (moisture < 40) return {
+                label: "Needs Irrigation", level: "urgent",
+                advice: "Irrigate now: the soil is dry. Recommended irrigation: 45 minutes (about 500 Litres)."
+            };
+            if (moisture < 50) return {
+                label: "Moderate Moisture", level: "moderate",
+                advice: "Moisture is adequate but getting lower. No irrigation needed yet. Keep monitoring and plan the next irrigation soon."
+            };
+            if (moisture <= 60) return {
+                label: "Healthy Crop", level: "healthy",
+                advice: "Moisture is adequate. No irrigation needed. Continue monitoring."
+            };
+            return {
+                label: "Soil Is Wet", level: "wet",
+                advice: "No irrigation needed: the soil is wet. Avoid watering and check drainage to prevent waterlogging."
+            };
+        }
+
+        function el(tag, text, className) {
+            var node = document.createElement(tag);
+            if (text !== undefined) node.textContent = text;
+            if (className) node.className = className;
+            return node;
+        }
+
+        function addRow(card, label, value) {
+            var row = el("div", undefined, "detail-row");
+            row.appendChild(el("span", label));
+            row.appendChild(el("span", value));
+            card.appendChild(row);
+        }
+
+        function showNotFound(content) {
+            document.title = "Plot Not Found";
+            content.appendChild(el("h1", "Plot Not Found"));
+            content.appendChild(el("p", "This plot is not registered in this browser."));
+            var link = el("a", "\u2190 Back to Farm Plot Navigation");
+            link.href = "plot-map.html";
+            var p = el("p");
+            p.appendChild(link);
+            content.appendChild(p);
+        }
+
+        function render() {
+            var content = document.getElementById("content");
+            var id = new URLSearchParams(window.location.search).get("id");
+            var farmer = null;
+            loadFarmers().forEach(function (f) {
+                if (id !== null && String(f.id) === id) farmer = f;
+            });
+
+            if (!farmer) { showNotFound(content); return; }
+
+            var moisture = Number(farmer.moisture);
+            var status = getStatus(moisture);
+            document.title = "Plot " + farmer.plot + " Details";
+
+            content.appendChild(el("h1", "Plot " + farmer.plot + " Details"));
+            content.appendChild(el("h2", status.label, "status-heading status-" + status.level));
+
+            var p = el("p", "Current soil moisture: ");
+            p.appendChild(el("b", moisture + "%"));
+            content.appendChild(p);
+
+            var photo = loadPhotos()[farmer.id];
+            if (typeof photo === "string" && photo.indexOf("data:image/") === 0) {
+                var img = el("img", undefined, "plot-photo-large");
+                img.src = photo;
+                img.alt = "Farm photo of plot " + farmer.plot;
+                content.appendChild(img);
+            }
+
+            var hasTemp = farmer.temperature !== undefined &&
+                          farmer.temperature !== null && farmer.temperature !== "";
+
+            var card = el("div", undefined, "detail-card");
+            addRow(card, "Farmer", farmer.name);
+            addRow(card, "Village", farmer.village);
+            addRow(card, "Crop Stage", farmer.stage);
+            addRow(card, "Soil Type", farmer.soil);
+            addRow(card, "Temperature", hasTemp ? farmer.temperature + " \u00B0C" : "Not recorded");
+            addRow(card, "Irrigation Method", farmer.irrigation);
+            addRow(card, "Registered On", farmer.date);
+            content.appendChild(card);
+
+            var advice = el("div", undefined, "advice-box advice-" + status.level);
+            var strong = el("b", "Advisory: ");
+            advice.appendChild(strong);
+            advice.appendChild(document.createTextNode(status.advice));
+            content.appendChild(advice);
+
+            var links = el("p", undefined, "links-row");
+            var back = el("a", "\u2190 Back to Farm Plot Navigation");
+            back.href = "plot-map.html";
+            links.appendChild(back);
+            links.appendChild(document.createElement("br"));
+            var adv = el("a", "View in Irrigation Advisory \u2192");
+            adv.href = "exp8/index.html#/fields";
+            links.appendChild(adv);
+            content.appendChild(links);
+        }
+
+        render();
+    </script>
+</body>
+</html>

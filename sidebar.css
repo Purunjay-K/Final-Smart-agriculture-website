@@ -1,0 +1,24 @@
+/* Task 4 - Categories/Resources Sidebar */
+.sidebar-card {
+    border: 2px solid #66bb6a;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 20px;
+    border-radius: 12px;
+    background-color: white;
+}
+
+.sidebar-card ul {
+    padding-left: 20px;
+    margin: 0;
+}
+
+.sidebar-card li {
+    padding: 8px 6px;
+    margin: 4px 0;
+    border-radius: 6px;
+}
+
+.sidebar-card li:hover {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+}

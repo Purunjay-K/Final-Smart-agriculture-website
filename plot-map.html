@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm Plot Navigation</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .plot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 22px;
+            margin-top: 25px;
+            text-align: left;
+        }
+        .plot-card {
+            display: block;
+            background: #fff;
+            border: 2px solid #81c784;
+            border-radius: 12px;
+            overflow: hidden;
+            text-decoration: none;
+            color: #263238;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.10);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .plot-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+        }
+        .plot-photo {
+            width: 100%;
+            height: 180px;
+            background: #e8f5e9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            overflow: hidden;
+        }
+        .plot-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .plot-info { padding: 14px 16px 16px; }
+        .plot-info h3 { margin: 0 0 4px; color: #1b5e20; }
+        .plot-info p { margin: 2px 0 10px; font-size: 0.92rem; color: #546e7a; }
+        .status-pill {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        .lvl-urgent   { background: #c62828; }
+        .lvl-moderate { background: #ef6c00; }
+        .lvl-healthy  { background: #2e7d32; }
+        .lvl-wet      { background: #0277bd; }
+        .empty-box {
+            margin: 30px auto;
+            max-width: 520px;
+            padding: 28px 24px;
+            background: #fff;
+            border: 2px dashed #81c784;
+            border-radius: 12px;
+            line-height: 1.6;
+        }
+        .empty-box h2 { color: #c62828; margin-top: 0; }
+        .empty-box a.cta {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 10px 20px;
+            background: #2e7d32;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 20px;
+        }
+        .empty-box a.cta:hover { background: #66bb6a; color: #102a13; }
+    </style>
+</head>
+<body>
+    <header style="text-align:center; padding:20px; background:#e0f2f1;">
+        <h1>Farm Plot Navigation</h1>
+        <p><i>Click on a registered plot to view its details</i></p>
+    </header>
+
+    <main class="page-content" style="width:min(1000px,94%); margin:25px auto; text-align:center;">
+        <div id="plotGrid" class="plot-grid"></div>
+        <p style="margin-top:30px;"><a href="farm-info.html">&larr; Back to Farm Information</a></p>
+    </main>
+
+    <footer>Smart Irrigation &bull; Better Farming &bull; Water Conservation</footer>
+
+    <script>
+        // Same keys that registration.html / validation.js saves to
+        var STORAGE_KEY = "registeredFarmers";
+        var PHOTO_KEY = "farmPhotos";
+
+        function loadFarmers() {
+            try {
+                var saved = localStorage.getItem(STORAGE_KEY);
+                var list = saved ? JSON.parse(saved) : [];
+                return Array.isArray(list) ? list : [];
+            } catch (e) { return []; }
+        }
+
+        function saveFarmers(list) {
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); } catch (e) {}
+        }
+
+        function loadPhotos() {
+            try {
+                var saved = localStorage.getItem(PHOTO_KEY);
+                var obj = saved ? JSON.parse(saved) : {};
+                return (obj && typeof obj === "object" && !Array.isArray(obj)) ? obj : {};
+            } catch (e) { return {}; }
+        }
+
+        // Status heading from the soil moisture (same bands as the advisory page)
+        function getStatus(moisture) {
+            if (moisture < 40)  return { label: "Needs Irrigation", level: "urgent" };
+            if (moisture < 50)  return { label: "Moderate Moisture", level: "moderate" };
+            if (moisture <= 60) return { label: "Healthy Crop", level: "healthy" };
+            return { label: "Soil Is Wet", level: "wet" };
+        }
+
+        function render() {
+            var grid = document.getElementById("plotGrid");
+            var farmers = loadFarmers();
+            var photos = loadPhotos();
+            grid.innerHTML = "";
+
+            if (farmers.length === 0) {
+                var box = document.createElement("div");
+                box.className = "empty-box";
+                box.style.gridColumn = "1 / -1";
+                box.innerHTML = '<h2>No plots registered</h2>' +
+                    '<p>Register your farm first. Your plot and farm photo will then appear here.</p>' +
+                    '<a class="cta" href="registration.html">Go to Farmer Registration &rarr;</a>';
+                grid.appendChild(box);
+                return;
+            }
+
+            // Older records may not have an id yet: give them one so each plot has its own link
+            var changed = false;
+            farmers.forEach(function (farmer, i) {
+                if (!farmer.id) { farmer.id = Date.now() + i; changed = true; }
+            });
+            if (changed) saveFarmers(farmers);
+
+            farmers.forEach(function (farmer) {
+                var moisture = Number(farmer.moisture);
+                var status = getStatus(moisture);
+
+                var card = document.createElement("a");
+                card.className = "plot-card";
+                card.href = "plot-details.html?id=" + encodeURIComponent(farmer.id);
+
+                var photoBox = document.createElement("div");
+                photoBox.className = "plot-photo";
+                var photo = photos[farmer.id];
+                if (typeof photo === "string" && photo.indexOf("data:image/") === 0) {
+                    var img = document.createElement("img");
+                    img.src = photo;
+                    img.alt = "Farm photo of plot " + farmer.plot;
+                    photoBox.appendChild(img);
+                } else {
+                    photoBox.textContent = "\uD83C\uDF31"; // seedling placeholder
+                    photoBox.title = "No photo uploaded";
+                }
+                card.appendChild(photoBox);
+
+                var info = document.createElement("div");
+                info.className = "plot-info";
+
+                var title = document.createElement("h3");
+                title.textContent = "Plot " + farmer.plot;
+                info.appendChild(title);
+
+                var who = document.createElement("p");
+                who.textContent = farmer.name + " \u2022 " + farmer.village;
+                info.appendChild(who);
+
+                var pill = document.createElement("span");
+                pill.className = "status-pill lvl-" + status.level;
+                pill.textContent = status.label + " \u2022 " + moisture + "%";
+                info.appendChild(pill);
+
+                card.appendChild(info);
+                grid.appendChild(card);
+            });
+        }
+
+        render();
+        window.addEventListener("storage", render);
+    </script>
+</body>
+</html>
